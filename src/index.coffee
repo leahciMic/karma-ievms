@@ -29,11 +29,14 @@ class IEVMLauncher
 
   kill: (done) ->
     # Close the IE window.
-    @vm.close().then =>
+    @vm.close().then(=>
       # Bail out and leave the motor running if it was previously.
       return done() if @wasRunning
       # Stop the vm (saving its state).
-      @vm.stop().then => done()
+      @vm.stop()
+        .then(done)
+        .catch(done)
+    ).catch(done)
 
   markCaptured: -> @captured = true
   isCaptured: -> @captured
